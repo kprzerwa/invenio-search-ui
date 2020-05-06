@@ -50,3 +50,9 @@ def format_sortoptions(sort_options):
     return json.dumps({
         'options': sorted_options(sort_options)
     })
+
+
+@blueprint.route('/searchkit')
+def search_react():
+    """Search page ui."""
+    return render_template("invenio_search_ui/reactsearchkit.html")

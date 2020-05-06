@@ -1,0 +1,20 @@
+{% extends config.SEARCH_UI_BASE_TEMPLATE %}
+
+{%- block css %}
+    {{ super() }}
+    {{ webpack['vendor.css'] }}
+{%- endblock css %}
+
+
+{%- block javascript %}
+  {{ super() }}
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  {{ webpack['react_searchkit_search_ui_app.js'] }}
+{%- endblock javascript %}
+
+
+{%- block page_body %}
+<div id="react-searchkit">
+
+</div>
+{%- endblock page_body -%}
