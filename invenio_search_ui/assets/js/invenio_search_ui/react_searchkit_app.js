@@ -69,19 +69,32 @@ const resultsPerPageValues = [
 export class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeIndex: -1, config: null };
+    this.state = { activeIndex: -1, config: null, templates: null };
   }
 
   componentDidMount() {
-    const confPath = this.props.config ?
-      this.props.config : 'invenio_search_ui/configRSK'
+    // const confPath = this.props.config ?
+    //   this.props.config : 'invenio_search_ui/configRSK'
 
-    import(`../${confPath}`).then((module) => {
+     // import(`../${confPath}`).then((module) => {
+    // // import('../wild_search/configRSK').then((module) => {
+    //   this.setState({config: module.default()})
+    //
+    // });
+
+    const overwriteMapPath = this.props.overwriteMap ?
+      this.props.overwriteMap : 'overwriteMap'
+    console.log(this.props.overwriteMap, "PATH_DYNAMIC_IMPORT")
+
+
+    import(/* webpackMode: "lazy" */
+      `../react_searchkit/${overwriteMapPath}`).then((module) => {
     // import('../wild_search/configRSK').then((module) => {
-      this.setState({config: module.default()})
+      const OverMap = module.default();
+      console.log(module.default(), '===================')
+      this.setState({templates: OverMap.templates, config: OverMap.config})
 
     });
-
   }
 
   handleClick = (e, titleProps) => {
@@ -172,6 +185,7 @@ export class App extends Component {
                   <OnResults
                     sortValues={sortValues}
                     resultsPerPageValues={resultsPerPageValues}
+                    templates={this.state.templates}
                   />
                 </ResultsLoader>
               </Grid.Column>
@@ -186,8 +200,9 @@ export class App extends Component {
   }
 }
 
-export function renderReact(ID, config){
-  return ReactDOM.render(<App config={config} />, document.getElementById(ID));
+export function renderReact(ID, overwrite){
+  console.log(ID, overwrite, 'INIT')
+  return ReactDOM.render(<App overwriteMap={overwrite}/>, document.getElementById(ID));
 }
 
 

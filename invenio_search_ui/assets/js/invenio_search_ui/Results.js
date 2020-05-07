@@ -21,8 +21,6 @@ import {
   Sort,
 } from 'react-searchkit';
 
-import {renderResultsGridItem} from "@templates/search/ResultsGridItemTemplate";
-import {renderResultsListItem} from "@templates/search/ResultsItemTemplate";
 
 const SpanWithMargin = ({ text, margin }) => {
   const size = '0.5em';
@@ -57,7 +55,7 @@ export class Results extends Component {
           src={result.imageSrc || 'http://placehold.it/200'}
         />
         <Item.Content>
-          <Item.Header>{metadata.title}</Item.Header>
+          <Item.Header>{metadata.title} DEFAULT TEMPLATE</Item.Header>
           <Item.Description>
             {_truncate(metadata.keywords.join(","), { length: 200 })}
           </Item.Description>
@@ -83,13 +81,16 @@ export class Results extends Component {
 
   render() {
     const { total } = this.props.currentResultsState.data;
-    const CustomResultsListCmp = () => (
-      // <ResultsList renderListItem={this.renderResultsListItem} />
-      <ResultsList renderListItem={renderResultsListItem} />
-    );
+    const CustomResultsListCmp = () => {
+
+      if (this.props.templates.resultsItem){
+        console.log(this.props.templates.resultsItem, "RENDERING ITEM")
+        return <ResultsList renderListItem={this.props.templates.resultsItem}/>
+      }
+      return <ResultsList renderListItem={this.renderResultsListItem} />
+    };
     const CustomResultsGridCmp = () => (
-      // <ResultsGrid renderGridItem={this.renderResultsGridItem} />
-      <ResultsGrid renderGridItem={renderResultsGridItem} />
+       <ResultsGrid renderGridItem={this.renderResultsGridItem} />
     );
     return total ? (
       <div>
