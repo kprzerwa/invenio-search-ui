@@ -8,13 +8,13 @@
 
 {%- block javascript %}
   {{ super() }}
-  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
   {{ webpack['react_searchkit_search_ui_app.js'] }}
+  <script type="text/javascript">window.renderReact("react-searchkit");</script>
 {%- endblock javascript %}
 
 
 {%- block page_body %}
 <div id="react-searchkit">
-
+<!--  <script type="application/javascript" src="{{ url_for('static', filename='js/ResultsItemOverride.js') }}"></script>-->
 </div>
 {%- endblock page_body -%}

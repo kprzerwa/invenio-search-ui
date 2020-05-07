@@ -22,6 +22,7 @@ import { InvenioSearchApi } from 'react-searchkit';
 import ReactDOM from 'react-dom';
 import 'semantic-ui-css/semantic.min.css';
 
+
 const OnResults = withState(Results);
 
 const sortValues = [
@@ -64,19 +65,23 @@ const resultsPerPageValues = [
   },
 ];
 
-const searchApi = new InvenioSearchApi({
-  axios: {
-      url: 'https://127.0.0.1:5000/api/records/',
-      withCredentials: true,
-    },
-  timeout: 5000,
-  headers: { Accept: 'application/json' },
-});
 
 export class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { activeIndex: -1 };
+    this.state = { activeIndex: -1, config: null };
+  }
+
+  componentDidMount() {
+    const confPath = this.props.config ?
+      this.props.config : 'invenio_search_ui/configRSK'
+
+    import(`../${confPath}`).then((module) => {
+    // import('../wild_search/configRSK').then((module) => {
+      this.setState({config: module.default()})
+
+    });
+
   }
 
   handleClick = (e, titleProps) => {
@@ -114,8 +119,10 @@ export class App extends Component {
   };
 
   render() {
+    console.log(this.state.config, "@@@@@currentSearchConf")
+    if(this.state.config){
     return (
-      <ReactSearchKit searchApi={searchApi}>
+      <ReactSearchKit searchApi={this.state.config}>
         <Container>
           <Grid>
             <Grid.Row>
@@ -173,7 +180,15 @@ export class App extends Component {
         </Container>
       </ReactSearchKit>
     );
+    }
+    console.log("returning null")
+    return null;
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('react-searchkit'));
+export function renderReact(ID, config){
+  return ReactDOM.render(<App config={config} />, document.getElementById(ID));
+}
+
+
+window.renderReact = renderReact
